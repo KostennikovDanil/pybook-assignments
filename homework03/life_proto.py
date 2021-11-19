@@ -81,11 +81,11 @@ class GameOfLife:
 
         grid = []
         if randomize == False:
-            grid = [[0 for j in range(self.cell_width)] for i in range(self.cell_height)]
+            grid = [[0 for j in range(self.cell_height)] for i in range(self.cell_width)]
         else:
             grid = [
-                [random.randint(0, 1) for j in range(self.cell_width)]
-                for i in range(self.cell_height)
+                [random.randint(0, 1) for j in range(self.cell_height)]
+                for i in range(self.cell_width)
             ]
         return grid
 
@@ -95,8 +95,8 @@ class GameOfLife:
         """
 
         lenght = self.cell_size - 1
-        for i in range(self.cell_height):
-            for j in range(self.cell_width):
+        for i in range(self.cell_width):
+            for j in range(self.cell_height):
                 if self.grid[i][j] == 1:
                     color = pygame.Color("green")
                 else:
@@ -128,8 +128,8 @@ class GameOfLife:
         for i in range(-1, 2):
             for j in range(-1, 2):
                 if (
-                    0 <= row + i < self.cell_height
-                    and 0 <= col + j < self.cell_width
+                    0 <= row + i < self.cell_width
+                    and 0 <= col + j < self.cell_height
                     and (i, j) != (0, 0)
                 ):
                     neighbours.append(self.grid[row + i][col + j])
@@ -145,8 +145,8 @@ class GameOfLife:
         """
 
         copy_grid = self.create_grid(False)
-        for i in range(self.cell_height):
-            for j in range(self.cell_width):
+        for i in range(self.cell_width):
+            for j in range(self.cell_height):
                 if (self.grid[i][j] == 0) and sum(self.get_neighbours((i, j))) == 3:
                     copy_grid[i][j] = 1
                 elif (self.grid[i][j] == 1) and (1 < sum(self.get_neighbours((i, j))) < 4):
