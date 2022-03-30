@@ -16,13 +16,13 @@
             </thead>
             <tbody>
                 %for row in rows:
-                <tr>
-                    <td><a href="{{ row.url }}">{{ row.title }}</a></td>
-                    <td>{{ row.author }}</td>
-                    <td>{{ row.points }}</td>
-                    <td class="positive"><a href="/add_label/?label=good&id={{ row.id }}">Интересно</a></td>
-                    <td class="active"><a href="/add_label/?label=maybe&id={{ row.id }}">Возможно</a></td>
-                    <td class="negative"><a href="/add_label/?label=never&id={{ row.id }}">Не интересно</a></td>
+                <tr style="background-color:{{ row[1] }}">
+                    <td><a href="{{ row[0].url }}">{{ row[0].title }}</a></td>
+                    <td>{{ row[0].author }}</td>
+                    <td>{{ row[0].points }}</td>
+                    <td class="positive"><a href="/add_label/?label=good&id={{ row[0].id }}">Интересно</a></td>
+                    <td class="active"><a href="/add_label/?label=maybe&id={{ row[0].id }}">Возможно</a></td>
+                    <td class="negative"><a href="/add_label/?label=never&id={{ row[0].id }}">Не интересно</a></td>
                 </tr>
                 %end
             </tbody>
@@ -37,3 +37,4 @@
         </div>
     </body>
 </html>
+ 

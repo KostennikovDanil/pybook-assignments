@@ -1,22 +1,66 @@
+from re import sub
 import requests
+import typing as tp
 from bs4 import BeautifulSoup
 
 
-def extract_news(parser):
+def extract_news(
+    parser: BeautifulSoup, url: str = "https://news.ycombinator.com/"
+) -> tp.List[tp.Dict[str, tp.Union[int, str]]]:
     """ Extract news from a given web page """
-    news_list = []
 
-    # PUT YOUR CODE HERE
+    news_list = []
+    title_list = []
+    links_list = []
+    author_list = []
+    points_list = []
+
+    title = parser.select(".storylink")
+    points = parser.select(".score")
+    subtext = parser.select(".subtext")
+
+    for i in title:
+        title_list.append(i.text)
+        link = i.get("href", None)
+        if link.startswith("item"):
+            links_list.append(url + link)
+        else:
+            links_list.append(link)
+
+    for i in range(len(subtext)):
+        author = subtext[i].select(".hnuser")
+        if author == []:
+            author = "Anonymous"
+        else:
+            author = author[0].text
+        author_list.append(author)
+        points = subtext[i].select(".score")
+        if points == []:
+            points = 0
+        else:
+            points = int(points[0].text.split()[0])
+        points_list.append(points)
+
+    for i in range(len(title)):
+        news_list.append(
+            {
+                "title": title_list[i],
+                "url": links_list[i],
+                "author": author_list[i],
+                "points": points_list[i],
+            }
+        )
 
     return news_list
 
 
-def extract_next_page(parser):
+def extract_next_page(parser: BeautifulSoup) -> str:
     """ Extract next page URL """
-    # PUT YOUR CODE HERE
+    link = parser.select(".morelink")[0]["href"]
+    return str(link)
 
 
-def get_news(url, n_pages=1):
+def get_news(url: str, n_pages: int = 1) -> tp.List[tp.Dict[str, tp.Union[int, str]]]:
     """ Collect news from a given web page """
     news = []
     while n_pages:
@@ -30,3 +74,10 @@ def get_news(url, n_pages=1):
         n_pages -= 1
     return news
 
+
+if __name__ == "__main__":
+    n = get_news(url="https://news.ycombinator.com/newest/", n_pages=4)
+    print(len(n))
+    print(n[1])
+    print(n[11])
+    print(n[111])
